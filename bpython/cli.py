@@ -39,7 +39,7 @@
 # - Instead the suspend key exits the program
 # - View source doesn't work on windows unless you install the less program (From GnuUtils or Cygwin)
 
-from __future__ import division, with_statement
+
 
 import platform
 import os
@@ -267,7 +267,7 @@ def make_colors(config):
     }
 
     if platform.system() == 'Windows':
-        c = dict(c.items() +
+        c = dict(list(c.items()) +
             [
             ('K', 8),
             ('R', 9),
@@ -423,7 +423,7 @@ class CLIRepl(repl.Repl):
         # curses does not handle this on its own. Sad.
         height, width = self.scr.getmaxyx()
         max_y = min(self.iy + (self.ix + len(self.s)) // width + 1, height)
-        for y in xrange(self.iy + 1, max_y):
+        for y in range(self.iy + 1, max_y):
             self.scr.move(y, 0)
             self.scr.clrtoeol()
 
@@ -518,7 +518,7 @@ class CLIRepl(repl.Repl):
         uses the formatting method as defined in formatter.py to parse the
         srings. It won't update the screen if it's reevaluating the code (as it
         does with undo)."""
-        if not py3 and isinstance(s, unicode):
+        if not py3 and isinstance(s, str):
             s = s.encode(getpreferredencoding())
 
         a = get_colpair(self.config, 'output')
@@ -663,7 +663,7 @@ class CLIRepl(repl.Repl):
         self.iy, self.ix = self.scr.getyx()
 
         if not self.paste_mode:
-            for _ in xrange(self.next_indentation()):
+            for _ in range(self.next_indentation()):
                 self.p_key('\t')
 
         self.cpos = 0
@@ -1070,7 +1070,7 @@ class CLIRepl(repl.Repl):
         curses.raw(False)
         try:
             return repl.Repl.push(self, s, insert_into_history)
-        except SystemExit, e:
+        except SystemExit as e:
             # Avoid a traceback on e.g. quit()
             self.do_exit = True
             self.exit_value = e.args
@@ -1146,7 +1146,7 @@ class CLIRepl(repl.Repl):
 
         real_lineno = self.iy
         height, width = self.scr.getmaxyx()
-        for i in xrange(lineno, len(self.buffer)):
+        for i in range(lineno, len(self.buffer)):
             string = self.buffer[i]
             # 4 = length of prompt
             length = len(string.encode(getpreferredencoding())) + 4
@@ -1213,7 +1213,7 @@ class CLIRepl(repl.Repl):
         self.scr.refresh()
 
         if self.buffer:
-            for _ in xrange(indent):
+            for _ in range(indent):
                 self.tab()
 
         self.evaluating = False
@@ -1231,7 +1231,7 @@ class CLIRepl(repl.Repl):
         else:
             t = s
 
-        if not py3 and isinstance(t, unicode):
+        if not py3 and isinstance(t, str):
             t = t.encode(getpreferredencoding())
 
         if not self.stdout_hist:
@@ -1361,7 +1361,7 @@ class CLIRepl(repl.Repl):
                 self.list_win.addstr('\n ')
 
         if self.docstring is not None:
-            if not py3 and isinstance(docstring_string, unicode):
+            if not py3 and isinstance(docstring_string, str):
                 docstring_string = docstring_string.encode(encoding, 'ignore')
             self.list_win.addstr('\n' + docstring_string,
                                  get_colpair(self.config, 'comment'))
@@ -1468,7 +1468,7 @@ class CLIRepl(repl.Repl):
                 self.s = self.s[:-len(self.matches_iter.current())] + cw
 
             current_match = back and self.matches_iter.previous() \
-                                  or self.matches_iter.next()
+                                  or next(self.matches_iter)
 
             # update s with the new match
             if current_match:
@@ -1640,7 +1640,7 @@ class Statusbar(object):
             self.c = c
 
         if s:
-            if not py3 and isinstance(s, unicode):
+            if not py3 and isinstance(s, str):
                 s = s.encode(getpreferredencoding())
 
             if self.c:
@@ -1880,7 +1880,7 @@ def main_curses(scr, args, config, interactive=True, locals_=None,
         exit_value = 0
         try:
             bpython.args.exec_code(interpreter, args)
-        except SystemExit, e:
+        except SystemExit as e:
             # The documentation of code.InteractiveInterpreter.runcode claims
             # that it reraises SystemExit. However, I can't manage to trigger
             # that. To be one the safe side let's catch SystemExit here anyway.

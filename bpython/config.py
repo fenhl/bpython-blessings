@@ -1,7 +1,7 @@
-from __future__ import with_statement
+
 import os
 import sys
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from itertools import chain
 from bpython.keys import cli_key_dispatch as key_dispatch
 from bpython.autocomplete import SIMPLE as default_completion
@@ -29,11 +29,11 @@ def default_config_path():
     return os.path.join(get_config_home(), 'config')
 
 def fill_config_with_default_values(config, default_values):
-    for section in default_values.iterkeys():
+    for section in default_values.keys():
         if not config.has_section(section):
             config.add_section(section)
 
-        for (opt, val) in default_values[section].iteritems():
+        for (opt, val) in default_values[section].items():
             if not config.has_option(section, opt):
                 config.set(section, opt, str(val))
 
@@ -250,7 +250,7 @@ def load_theme(struct, path, colors, default_colors):
             colors[k] = theme.get('interface', k)
 
     # Check against default theme to see if all values are defined
-    for k, v in default_colors.iteritems():
+    for k, v in default_colors.items():
         if k not in colors:
             colors[k] = v
     f.close()

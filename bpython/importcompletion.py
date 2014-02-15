@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import with_statement
+
 
 import imp
 import os
@@ -162,7 +162,7 @@ def find_all_modules(path=None):
         if not p:
             p = os.curdir
         for module in find_modules(p):
-            if not py3 and not isinstance(module, unicode):
+            if not py3 and not isinstance(module, str):
                 try:
                     module = module.decode(sys.getfilesystemencoding())
                 except UnicodeDecodeError:
@@ -179,7 +179,7 @@ def find_coroutine():
         return None
 
     try:
-        find_iterator.next()
+        next(find_iterator)
     except StopIteration:
         fully_loaded = True
 

@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 #
 
-from __future__ import with_statement
+
 import collections
 import inspect
 import keyword
@@ -119,14 +119,14 @@ def parsekeywordpairs(signature):
     parendepth = 0
     for token, value in tokens:
         if preamble:
-            if token is Token.Punctuation and value == u"(":
+            if token is Token.Punctuation and value == "(":
                 preamble = False
             continue
 
         if token is Token.Punctuation:
-            if value in [u'(', u'{', u'[']:
+            if value in ['(', '{', '[']:
                 parendepth += 1
-            elif value in [u')', u'}', u']']:
+            elif value in [')', '}', ']']:
                 parendepth -= 1
             elif value == ':' and parendepth == -1:
                 # End of signature reached
@@ -222,7 +222,7 @@ def getargspec(func, f):
     func_name = getattr(f, '__name__', None)
 
     try:
-        is_bound_method = ((inspect.ismethod(f) and f.im_self is not None)
+        is_bound_method = ((inspect.ismethod(f) and f.__self__ is not None)
                     or (func_name == '__init__' and not
                         func.endswith('.__init__')))
     except:
@@ -261,8 +261,8 @@ def is_eval_safe_name(string):
 def is_callable(obj):
     if has_instance_type and isinstance(obj, types.InstanceType):
         # Work around a CPython bug, see CPython issue #7624
-        return callable(obj)
+        return isinstance(obj, collections.Callable)
     elif has_collections_callable:
         return isinstance(obj, collections.Callable)
     else:
-        return callable(obj)
+        return isinstance(obj, collections.Callable)

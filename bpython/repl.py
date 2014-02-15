@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 #
 
-from __future__ import with_statement
+
 import code
 import codecs
 import errno
@@ -38,9 +38,9 @@ from itertools import takewhile
 from locale import getpreferredencoding
 from socket import error as SocketError
 from string import Template
-from urllib import quote as urlquote
-from urlparse import urlparse
-from xmlrpclib import ServerProxy, Error as XMLRPCError
+from urllib.parse import quote as urlquote
+from urllib.parse import urlparse
+from xmlrpc.client import ServerProxy, Error as XMLRPCError
 
 from pygments.token import Token
 
@@ -279,7 +279,7 @@ class MatchesIterator(object):
         self.matches = list(matches)
         self.index = -1
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.index != -1
 
     def __iter__(self):
@@ -290,7 +290,7 @@ class MatchesIterator(object):
             raise ValueError('No current match.')
         return self.matches[self.index]
 
-    def next(self):
+    def __next__(self):
         self.index = (self.index + 1) % len(self.matches)
         return self.matches[self.index]
 
@@ -611,7 +611,7 @@ class Repl(object):
 
         if not e and self.argspec:
             matches.extend(name + '=' for name in self.argspec[1][0]
-                           if isinstance(name, basestring) and name.startswith(cw))
+                           if isinstance(name, str) and name.startswith(cw))
             if py3:
                 matches.extend(name + '=' for name in self.argspec[1][4]
                                if name.startswith(cw))
@@ -759,7 +759,7 @@ class Repl(object):
         """Upload to pastebin via XML-RPC."""
         try:
             pasteservice = ServerProxy(self.config.pastebin_url)
-        except IOError, e:
+        except IOError as e:
             self.interact.notify(_("Pastebin error for URL '%s': %s") %
                                  (self.config.pastebin_url, str(e)))
             return
@@ -768,7 +768,7 @@ class Repl(object):
         try:
             paste_id = pasteservice.pastes.newPaste('pycon', s, '', '', '',
                    self.config.pastebin_private)
-        except (SocketError, XMLRPCError), e:
+        except (SocketError, XMLRPCError) as e:
             self.interact.notify(_('Upload failed: %s') % (str(e), ) )
             return
 
@@ -793,7 +793,7 @@ class Repl(object):
             helper.stdin.write(s.encode(getpreferredencoding()))
             output = helper.communicate()[0].decode(getpreferredencoding())
             paste_url = output.split()[0]
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 self.interact.notify(_('Upload failed: '
                                        'Helper program not found.'))
@@ -851,7 +851,7 @@ class Repl(object):
             self.rl_history.append(s)
             try:
                 self.rl_history.save(histfilename, getpreferredencoding(), self.config.hist_length)
-            except EnvironmentError, err:
+            except EnvironmentError as err:
                 self.interact.notify("Error occured while writing to file %s (%s) " % (histfilename, err.strerror))
                 self.rl_history.entries = oldhistory
                 self.rl_history.append(s)
@@ -917,7 +917,7 @@ class Repl(object):
             all_tokens.pop()
         all_tokens[-1] = (all_tokens[-1][0], all_tokens[-1][1].rstrip('\n'))
         line = pos = 0
-        parens = dict(zip('{([', '})]'))
+        parens = dict(list(zip('{([', '})]')))
         line_tokens = list()
         saved_tokens = list()
         search_for_paren = True
@@ -943,7 +943,7 @@ class Repl(object):
                     else:
                         stack.append((line, len(line_tokens) - 1,
                                       line_tokens, value))
-                elif value in parens.itervalues():
+                elif value in iter(parens.values()):
                     saved_stack = list(stack)
                     try:
                         while True:
@@ -1047,7 +1047,7 @@ def token_is(token_type):
 def token_is_any_of(token_types):
     """Return a callable object that returns whether a token is any of the
     given types `token_types`."""
-    is_token_types = map(token_is, token_types)
+    is_token_types = list(map(token_is, token_types))
 
     def token_is_any_of(token):
         return any(check(token) for check in is_token_types)

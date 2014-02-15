@@ -50,22 +50,22 @@ def page(data, use_internal=False):
         curses.endwin()
         try:
             popen = subprocess.Popen(command, stdin=subprocess.PIPE)
-            if isinstance(data, unicode):
+            if isinstance(data, str):
                 data = data.encode(sys.__stdout__.encoding, 'replace')
             popen.stdin.write(data)
             popen.stdin.close()
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 # pager command not found, fall back to internal pager
                 page_internal(data)
                 return
-        except IOError, e:
+        except IOError as e:
             if e.errno != errno.EPIPE:
                 raise
         while True:
             try:
                 popen.wait()
-            except OSError, e:
+            except OSError as e:
                 if e.errno != errno.EINTR:
                     raise
             else:

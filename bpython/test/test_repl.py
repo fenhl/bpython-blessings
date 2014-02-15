@@ -121,14 +121,14 @@ class TestMatchesIterator(unittest.TestCase):
                                                      matches=self.matches)
 
     def test_next(self):
-        self.assertEqual(self.matches_iterator.next(), self.matches[0])
+        self.assertEqual(next(self.matches_iterator), self.matches[0])
 
         for x in range(len(self.matches) - 1):
-            self.matches_iterator.next()
+            next(self.matches_iterator)
 
-        self.assertEqual(self.matches_iterator.next(), self.matches[0])
-        self.assertEqual(self.matches_iterator.next(), self. matches[1])
-        self.assertNotEqual(self.matches_iterator.next(), self.matches[1])
+        self.assertEqual(next(self.matches_iterator), self.matches[0])
+        self.assertEqual(next(self.matches_iterator), self. matches[1])
+        self.assertNotEqual(next(self.matches_iterator), self.matches[1])
 
     def test_previous(self):
         self.assertEqual(self.matches_iterator.previous(), self.matches[2])
@@ -145,7 +145,7 @@ class TestMatchesIterator(unittest.TestCase):
         then True once we active a match.
         """
         self.assertFalse(self.matches_iterator)
-        self.matches_iterator.next()
+        next(self.matches_iterator)
         self.assertTrue(self.matches_iterator)
 
     def test_iter(self):
@@ -154,7 +154,7 @@ class TestMatchesIterator(unittest.TestCase):
 
     def test_current(self):
         self.assertRaises(ValueError, self.matches_iterator.current)
-        self.matches_iterator.next()
+        next(self.matches_iterator)
         self.assertEqual(self.matches_iterator.current(), self.matches[0])
 
     def test_update(self):

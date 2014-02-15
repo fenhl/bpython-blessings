@@ -35,28 +35,28 @@ class CrashersTest(object):
         result = Deferred()
 
         class Protocol(ProcessProtocol):
-            STATES = (SEND_INPUT, COLLECT) = xrange(2)
+            STATES = (SEND_INPUT, COLLECT) = range(2)
 
             def __init__(self):
                 self.data = ""
                 self.delayed_call = None
                 self.states = iter(self.STATES)
-                self.state = self.states.next()
+                self.state = next(self.states)
 
             def outReceived(self, data):
                 self.data += data
                 if self.delayed_call is not None:
                     self.delayed_call.cancel()
-                self.delayed_call = reactor.callLater(0.5, self.next)
+                self.delayed_call = reactor.callLater(0.5, self.__next__)
 
-            def next(self):
+            def __next__(self):
                 self.delayed_call = None
                 if self.state == self.SEND_INPUT:
                     index = self.data.find(">>> ")
                     if index >= 0:
                         self.data = self.data[index + 4:]
                         self.transport.write(input)
-                        self.state = self.states.next()
+                        self.state = next(self.states)
                 else:
                     self.transport.closeStdin()
                     if self.transport.pid is not None:

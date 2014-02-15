@@ -33,7 +33,7 @@ This is still *VERY* rough.
 """
 
 
-from __future__ import absolute_import, with_statement, division
+
 
 import sys
 import os
@@ -142,7 +142,7 @@ if urwid.VERSION < (1, 0, 0) and hasattr(urwid, 'TwistedEventLoop'):
                     # This is the same as in urwid.
                     # We are obviously not supposed to ever hit this.
                     import sys
-                    print sys.exc_info()
+                    print(sys.exc_info())
                     self._exc_info = sys.exc_info()
                     self.reactor.crash()
             return wrapper
@@ -281,7 +281,7 @@ def decoding_input_filter(keys, raw):
     encoding = locale.getpreferredencoding()
     converted_keys = list()
     for key in keys:
-        if isinstance(key, basestring):
+        if isinstance(key, str):
             converted_keys.append(key.decode(encoding))
         else:
             converted_keys.append(key)
@@ -880,7 +880,7 @@ class URWIDRepl(repl.Repl):
         self.scr.refresh()
 
         if self.buffer:
-            for _ in xrange(indent):
+            for _ in range(indent):
                 self.tab()
 
         self.evaluating = False
@@ -898,7 +898,7 @@ class URWIDRepl(repl.Repl):
         else:
             t = s
 
-        if not py3 and isinstance(t, unicode):
+        if not py3 and isinstance(t, str):
             t = t.encode(locale.getpreferredencoding())
 
         if not self.stdout_hist:
@@ -919,7 +919,7 @@ class URWIDRepl(repl.Repl):
         # Pretty blindly adapted from bpython.cli
         try:
             return repl.Repl.push(self, s, insert_into_history)
-        except SystemExit, e:
+        except SystemExit as e:
             self.exit_value = e.args
             raise urwid.ExitMainLoop()
         except KeyboardInterrupt:
@@ -1094,7 +1094,7 @@ class URWIDRepl(repl.Repl):
                 if back:
                     current_match = self.matches_iter.previous()
                 else:
-                    current_match = self.matches_iter.next()
+                    current_match = next(self.matches_iter)
                 if current_match:
                     self.overlay.tooltip_focus = True
                     if self.tooltip.grid:
@@ -1129,7 +1129,7 @@ def main(args=None, locals_=None, banner=None):
             from twisted.application import reactors
             # Stolen from twisted.application.app (twistd).
             for r in reactors.getReactorTypes():
-                print '    %-4s\t%s' % (r.shortName, r.description)
+                print('    %-4s\t%s' % (r.shortName, r.description))
         except ImportError:
             sys.stderr.write('No reactors are available. Please install '
                 'twisted for reactor support.\n')
@@ -1138,7 +1138,7 @@ def main(args=None, locals_=None, banner=None):
     palette = [
         (name, COLORMAP[color.lower()], 'default',
          'bold' if color.isupper() else 'default')
-        for name, color in config.color_scheme.iteritems()]
+        for name, color in config.color_scheme.items()]
     palette.extend([
             ('bold ' + name, color + ',bold', background, monochrome)
             for name, color, background, monochrome in palette])

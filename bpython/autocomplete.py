@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 #
 
-import __builtin__
+import builtins
 import rlcompleter
 import re
 from bpython import inspection
@@ -114,11 +114,11 @@ class Autocomplete(rlcompleter.Completer):
         for word in keyword.kwlist:
             if self.method_match(word, n, text):
                 hash[word] = 1
-        for nspace in [__builtin__.__dict__, self.namespace]:
-            for word, val in nspace.items():
+        for nspace in [builtins.__dict__, self.namespace]:
+            for word, val in list(nspace.items()):
                 if self.method_match(word, len(text), text) and word != "__builtins__":
                     hash[self._callable_postfix(val, word)] = 1
-        matches = hash.keys()
+        matches = list(hash.keys())
         matches.sort()
         return matches
 

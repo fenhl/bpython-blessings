@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # The MIT License
 #
 # Copyright (c) 2008 Bob Farrell

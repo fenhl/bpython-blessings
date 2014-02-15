@@ -145,7 +145,7 @@ setup(
     author_email = "fenhl@fenhl.net",
     description = "Fancy Interface to the Python Interpreter",
     license = "MIT/X",
-    url = "https://github.com/fenhl/bpython-bleddings",
+    url = "https://github.com/fenhl/bpython-blessings",
     long_description = """bpython-blessings is a fancy blessings interface to the Python interactive interpreter for Unix-like operating systems.""",
     install_requires = [
         'blessings',
@@ -164,16 +164,10 @@ setup(
     },
     entry_points = {
         'console_scripts': [
-            'bpython = bpython.cli:main',
-            'bpython-urwid = bpython.urwid:main [urwid]',
-        ],
-        'gui_scripts': [
-            'bpython-gtk = bpython.gtk_:main'
+            'bpython-blessings = bpython.cli:main'
         ]
     },
-    scripts = ([] if using_setuptools else ['data/bpython',
-                                            'data/bpython-gtk',
-                                            'data/bpython-urwid']),
+    scripts = ([] if using_setuptools else ['data/bpython-blessings']),
     cmdclass = cmdclass,
     test_suite = 'bpython.test'
 )

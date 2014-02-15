@@ -1,0 +1,3 @@
+Pygments
+Sphinx>=1.2
+blessings>=1.5

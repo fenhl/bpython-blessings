@@ -139,16 +139,16 @@ for language in os.listdir(translations_dir):
         mo_files.append(mo_subpath)
 
 setup(
-    name="bpython",
+    name="bpython-blessings",
     version = __version__,
-    author = "Bob Farrell, Andreas Stuehrk et al.",
-    author_email = "robertanthonyfarrell@gmail.com",
+    author = "Fenhl, Bob Farrell, Andreas Stuehrk et al.",
+    author_email = "fenhl@fenhl.net",
     description = "Fancy Interface to the Python Interpreter",
     license = "MIT/X",
-    url = "http://www.bpython-interpreter.org/",
-    long_description = """bpython is a fancy interface to the Python
-    interpreter for Unix-like operating systems.""",
+    url = "https://github.com/fenhl/bpython-bleddings",
+    long_description = """bpython-blessings is a fancy blessings interface to the Python interactive interpreter for Unix-like operating systems.""",
     install_requires = [
+        'blessings',
         'pygments'
     ],
     extras_require = {
@@ -169,7 +169,7 @@ setup(
         ],
         'gui_scripts': [
             'bpython-gtk = bpython.gtk_:main'
-         ]
+        ]
     },
     scripts = ([] if using_setuptools else ['data/bpython',
                                             'data/bpython-gtk',

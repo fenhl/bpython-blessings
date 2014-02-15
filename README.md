@@ -4,17 +4,10 @@ bpython-blessings - A fancy blessings interface to the Python interactive interp
 Dependencies
 ------------
 
-Pygments
-
-```
-apt-get install python-pygments
-```
-
-Sphinx != 1.1.2 (for the documentation only)
-
-```
-apt-get install python-sphinx
-```
+*   Python 3.3
+*   [Pygments](https://pypi.python.org/pypi/Pygments)
+*   [Sphinx](https://pypi.python.org/pypi/Sphinx) 1.2 (for the documentation only)
+*   [blessings](https://pypi.python.org/pypi/blessings) 1.5
 
 Introduction
 ------------
@@ -60,9 +53,9 @@ Features
 Configuration
 -------------
 
-See the sample-config file for a list of available options.  You should save
-your config file as ~/.config/bpython/config (i.e
-$XDG_CONFIG_HOME/bpython/config) or specify at the command line::
+See the sample-config file for a list of available options. You should save
+your config file as `~/.config/bpython/config` (i.e
+`$XDG_CONFIG_HOME/bpython/config`) or specify at the command line::
 
 ```
 bpython --config /path/to/bpython/config

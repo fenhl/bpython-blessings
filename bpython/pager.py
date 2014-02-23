@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 
-import curses
+import blessings
 import errno
 import os
 import pydoc
